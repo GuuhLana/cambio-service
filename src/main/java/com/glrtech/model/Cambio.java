@@ -4,15 +4,35 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Cambio implements Serializable{
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
+
+@Entity(name = "cambio")
+public class Cambio implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(name = "from_currency", nullable = false, length = 3)
 	private String from;
+	
+	@Column(name = "to_currency", nullable = false, length = 3)
 	private String to;
+	
+	@Column(nullable = false)
 	private BigDecimal conversionFactor;
+	
+	@Transient
 	private BigDecimal convertedValue;
+	
+	@Transient
 	private String enviroment;
 
 	public Cambio(Long id, String from, String to, BigDecimal conversionFactor, BigDecimal convertedValue,
@@ -90,12 +110,9 @@ public class Cambio implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Cambio other = (Cambio) obj;
-		return Objects.equals(conversionFactor,
-				other.conversionFactor)
+		return Objects.equals(conversionFactor, other.conversionFactor)
 				&& Objects.equals(convertedValue, other.convertedValue) && Objects.equals(enviroment, other.enviroment)
 				&& Objects.equals(from, other.from) && Objects.equals(id, other.id) && Objects.equals(to, other.to);
 	}
-	
-	
 
 }
